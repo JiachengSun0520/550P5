@@ -6,27 +6,27 @@ using System.Text;
 using Microsoft.Z3;
 namespace dotnet
 {
-    //位置类型
+    //location type
     public enum LocType
     {
-        SpaceLoc    = 0,    //将空白的位置设置为0
-        GoalLoc     = 1,    //目标位置设置为1
-        RobotLoc    = 2,    //机器人位置设置为2
-        MoveLoc     = 3,    //可移动的冰块设置为3
-        ObsLoc      = 4,    //障碍物设置为4
-        RunLoc      = 5     //机器人走过的位置为5
+        SpaceLoc    = 0,    //0 means for empty location
+        GoalLoc     = 1,    //1 means for goal state
+        RobotLoc    = 2,    //2 means for robot
+        MoveLoc     = 3,    //3 means for movabale box
+        ObsLoc      = 4,    //4 means for obstacles
+        RunLoc      = 5     //5 means for path
     }
-    //方位类型
+    //direction type
     public enum DirType
     {
-        Up_Dir          = 0, //往上走
-        Down_Dir        = 1, //往下走
-        Left_Dir        = 2, //往左走
-        Right_Dir       = 3  //往右走
+        Up_Dir          = 0, //0 means for going up
+        Down_Dir        = 1, //1 means for going down
+        Left_Dir        = 2, //2 means for going left
+        Right_Dir       = 3  //3 means for going right
     }
 
 
-    //表示物体位置信息
+    //location info of objects
     public class nowLoc
     {
         private int lx;
@@ -35,7 +35,7 @@ namespace dotnet
         private int lt;
         //dir type
         private int dt;
-        //坐标位置
+        //coordinate location
         public nowLoc(int x, int y, int t)
         {
             Lx = x;
@@ -50,19 +50,19 @@ namespace dotnet
     }
     class main
     {
-        //判断当前位置是否为目标位置
+        //check the currecnt position. target position or not
         public static List<nowLoc> listVist = new List<nowLoc>();
-        //判断当前位置是否为目标位置
+        //check the currecnt position. target position or not
         public static nowLoc startLc;
-        //判断当前位置是否为目标位置
+        //check the currecnt position. target position or not
         public static nowLoc endLc;
         public static int[,] nowSecen;
-        //判断获取到的下一个位置
+        //check for the next location 
         public static nowLoc GetNextLoc()
         {
             nowLoc nl = new nowLoc(listVist[listVist.Count - 1].Lx, listVist[listVist.Count - 1].Ly, listVist[listVist.Count - 1].Lt);
             nl.Dt = listVist[listVist.Count - 1].Dt;
-            //直接按照前进方向进行获取
+            //move according to the direction
             if (nl.Dt == (int)DirType.Up_Dir)
             {
                 nl.Lx--;
@@ -137,10 +137,10 @@ namespace dotnet
             }
             nl.Lt = nowSecen[nl.Lx, nl.Ly];
             
-            //如果是障碍物
+            //if it is obstacles 
             if (nl.Lt == (int)LocType.ObsLoc)
             {
-                //先增加障碍物
+                //in crease obstacles first 
                 //listVist.Add(new nowLoc(nl.Lx, nl.Ly, nowSecen[nl.Lx, nl.Ly]));
                 if (listVist[listVist.Count - 1].Lt == (int)LocType.MoveLoc)
                 {
@@ -150,12 +150,12 @@ namespace dotnet
                 }
                 else
                 {
-                    //先退回坐标
+                    //go back 
                     nl.Lx = listVist[listVist.Count - 1].Lx;
                     nl.Ly = listVist[listVist.Count - 1].Ly;
                     nl.Lt = listVist[listVist.Count - 1].Lt;
                 }
-                //然后改变方向
+                //change direction
                 if (nl.Dt == (int)DirType.Left_Dir || nl.Dt == (int)DirType.Right_Dir) //左右改上下
                 {
                     if(nl.Lx < endLc.Lx && nl.Lx + 1 < sizeX && nowSecen[nl.Lx+1, nl.Ly] != (int)LocType.ObsLoc)
@@ -183,7 +183,7 @@ namespace dotnet
                         } 
                     }
                 }
-                else  //上下改左右
+                else  //up/down to left/right
                 {
                     if (nl.Ly > endLc.Ly && nl.Ly - 1 >= 0 && nowSecen[nl.Lx, nl.Ly - 1] != (int)LocType.ObsLoc)
                     {
@@ -211,24 +211,24 @@ namespace dotnet
                 }
                 nl.Lt = nowSecen[nl.Lx, nl.Ly];
             }
-            //判断目标类型
+            //check for the location type
             if (listVist[listVist.Count - 1].Lt == (int)LocType.MoveLoc && listVist[listVist.Count - 1].Dt == nl.Dt)
             {
                 listVist[listVist.Count - 1].Lt = 0;
                 nl.Lt = (int)LocType.MoveLoc;
             }
-            //当前为冰块
+            //if it is movable box
             if(nl.Lt == (int)LocType.MoveLoc)
             {
-                //到达边界时，自动转换为障碍物
+                //to the margin, make it obstacles
                 if(nl.Lx == 0 || nl.Ly == 0 || nl.Lx == sizeX - 1 || nl.Ly == sizeY -1)
                 {
                     //listVist.Add(nl);
-                    //先退回坐标
+                    //go back to previous location
                     nl.Lx = listVist[listVist.Count - 1].Lx;
                     nl.Ly = listVist[listVist.Count - 1].Ly;
                     nl.Lt = listVist[listVist.Count - 1].Lt;
-                    //然后改变方向
+                    //change direction
                     if (nl.Dt == (int)DirType.Left_Dir || nl.Dt == (int)DirType.Right_Dir) //左右改上下
                     {
                         if (nl.Lx < endLc.Lx && nl.Lx + 1 < sizeX && nowSecen[nl.Lx + 1, nl.Ly] != (int)LocType.ObsLoc)
@@ -256,7 +256,7 @@ namespace dotnet
                             }
                         }
                     }
-                    else  //上下改左右
+                    else  //up/down to left/right
                     {
                         if (nl.Ly > endLc.Ly && nl.Ly - 1 >= 0 && nowSecen[nl.Lx, nl.Ly - 1] != (int)LocType.ObsLoc)
                         {
@@ -291,10 +291,10 @@ namespace dotnet
 
         public static bool FindPath()
         {
-            //初始进行
+            //initial
             if(listVist.Count <= 0)
             {
-                //先往下走
+                //go down first
                 if(endLc.Lx > startLc.Lx && nowSecen[startLc.Lx + 1, startLc.Ly] != (int)(LocType.ObsLoc))
                 {
                     nowLoc nl = new nowLoc(startLc.Lx + 1, startLc.Ly, nowSecen[startLc.Lx + 1, startLc.Ly]);
@@ -303,7 +303,7 @@ namespace dotnet
                     if (FindPath() == true)
                         return true;
                 }
-                //先往上走
+                //go up first
                 if (endLc.Lx < startLc.Lx && nowSecen[startLc.Lx - 1, startLc.Ly] != (int)(LocType.ObsLoc))
                 {
                     nowLoc nl = new nowLoc(startLc.Lx - 1, startLc.Ly, nowSecen[startLc.Lx - 1, startLc.Ly]);
@@ -312,7 +312,7 @@ namespace dotnet
                     if (FindPath() == true)
                         return true;
                 }
-                //先往右走
+                //go right first
                 if (endLc.Ly > startLc.Ly && nowSecen[startLc.Lx, startLc.Ly + 1] != (int)(LocType.ObsLoc))
                 {
                     nowLoc nl = new nowLoc(startLc.Lx, startLc.Ly + 1, nowSecen[startLc.Lx, startLc.Ly + 1]);
@@ -321,7 +321,7 @@ namespace dotnet
                     if (FindPath() == true)
                         return true;
                 }
-                //先往左走
+                //go left first
                 if (endLc.Ly < startLc.Ly && nowSecen[startLc.Lx, startLc.Ly - 1] != (int)(LocType.ObsLoc))
                 {
                     nowLoc nl = new nowLoc(startLc.Lx, startLc.Ly - 1, nowSecen[startLc.Lx, startLc.Ly - 1]);
@@ -334,7 +334,7 @@ namespace dotnet
             }
             else
             { 
-                //达到终止条件
+                //got termination 
                 if (listVist[listVist.Count - 1].Lx == endLc.Lx && listVist[listVist.Count - 1].Ly == endLc.Ly)
                 {
                     return true;
@@ -357,7 +357,7 @@ namespace dotnet
                             return false; 
                         }
                     }
-                    //可以继续行驶
+                    //can keep going
                     listVist.Add(GetNextLoc());
                     return FindPath(); 
                 }
@@ -365,7 +365,7 @@ namespace dotnet
         }
         static int sizeX = 0, sizeY = 0;
         //read tthe scence data, and return the data
-        //将空白的位置设置为0 目标位置设置为1 机器人的位置为2  可移动的冰块设置为3 障碍物设置为4 机器人走过的位置为5 
+        //0 empty cell, 1 goal cell, 2 robot cell, 3 movable box cell, 4 obstacles, 5 path
         public static void LoadScence(string sPath)
         {
             string[] lstr = File.ReadAllLines(sPath);
@@ -378,7 +378,7 @@ namespace dotnet
                     break;
                 } 
             }
-            //初始化棋盘大小，默认位置都为空
+            //initial board size
             int[,] nowSc = new int[sizeX, sizeY];
             for(int i = 0; i < sizeX;i++)
             {
@@ -388,11 +388,11 @@ namespace dotnet
                 }
             }
             int locX, locY;
-            //初始类型为可移动的冰块
+            //initial type is movable box 
             LocType nowType = LocType.MoveLoc;
             for (int i = 0; i < lstr.Length; i++)
             {
-                //绑定目标位置
+                //bind target position
                 if (lstr[i].StartsWith("g "))
                 {
                     locY = Convert.ToInt32(lstr[i].Split(' ')[1]);
@@ -400,7 +400,7 @@ namespace dotnet
                     nowSc[locX, locY] = (int)LocType.GoalLoc;
                     endLc = new nowLoc(locX, locY, nowSc[locX, locY]);
                 }
-                //绑定机器人位置
+                //bind robot position
                 else if (lstr[i].StartsWith("r "))
                 {
                     locY = Convert.ToInt32(lstr[i].Split(' ')[1]);
@@ -408,17 +408,17 @@ namespace dotnet
                     nowSc[locX, locY] = (int)LocType.RobotLoc;
                     startLc = new nowLoc(locX, locY, nowSc[locX, locY]);
                 }
-                //绑定障碍物类型
+                //bind obstacle position
                 else if (lstr[i].StartsWith("obstacle"))
                 {
                     nowType = LocType.ObsLoc;
                 }
-                //如果最后一行，则跳出
+                //last line indicator
                 else if(lstr[i].StartsWith("end"))
                 {
                     break;
                 }
-                //判断是否为位置类型，绑定冰块和障碍物
+                //check position type, bind movable box or obstacles
                 else if(lstr[i].Split(' ').Length == 2)
                 {
                     locY = Convert.ToInt32(lstr[i].Split(' ')[0]);
@@ -443,7 +443,6 @@ namespace dotnet
             Console.WriteLine("GOAL Valid");
 
             // 9x9 matrix of integer variables
-            //初始一个 9 * 9 的二维数组
             IntExpr[][] X = new IntExpr[sizeX][];
             for (uint i = 0; i < sizeX; i++)
             {
@@ -452,8 +451,7 @@ namespace dotnet
                     X[i][j] = (IntExpr)ctx.MkConst(ctx.MkSymbol("x_" + (i + 1) + "_" + (j + 1)), ctx.IntSort);
             }
 
-            // each cell contains a value in {0, ..., 5}
-            // 每个单元格包含的数值范围为 0-5 及枚举值的 SpaceLoc 到 RunLoc
+            // each cell contains a value in {0, ..., 5}, spaceloc to runloc
             Expr[][] cells_c = new Expr[sizeX][];
             for (uint i = 0; i < sizeX; i++)
             {
@@ -549,7 +547,7 @@ namespace dotnet
 
         static void Main(string[] args)
         {
-            string sc = "scene1";
+            string sc = "ice_cave";
             Console.WriteLine("note:"+ sc);
             Console.WriteLine("0:space  1:goal  2:robot 3:movable 4;obstacle 5:path ");
             LoadScence(sc);
