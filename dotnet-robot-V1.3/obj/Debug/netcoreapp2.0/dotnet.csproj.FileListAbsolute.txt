@@ -1,0 +1,14 @@
+D:\PersonData\temp\2021\11\1115\z3-master\examples\dotnet\obj\Debug\netcoreapp2.0\dotnet.csproj.AssemblyReference.cache
+D:\PersonData\temp\2021\11\1115\z3-master\examples\dotnet\obj\Debug\netcoreapp2.0\dotnet.GeneratedMSBuildEditorConfig.editorconfig
+D:\PersonData\temp\2021\11\1115\z3-master\examples\dotnet\obj\Debug\netcoreapp2.0\dotnet.AssemblyInfoInputs.cache
+D:\PersonData\temp\2021\11\1115\z3-master\examples\dotnet\obj\Debug\netcoreapp2.0\dotnet.AssemblyInfo.cs
+D:\PersonData\temp\2021\11\1115\z3-master\examples\dotnet\obj\Debug\netcoreapp2.0\dotnet.csproj.CoreCompileInputs.cache
+D:\PersonData\temp\2021\11\1115\z3-master\examples\dotnet\bin\Debug\netcoreapp2.0\libz3.dll
+D:\PersonData\temp\2021\11\1115\z3-master\examples\dotnet\bin\Debug\netcoreapp2.0\dotnet.deps.json
+D:\PersonData\temp\2021\11\1115\z3-master\examples\dotnet\bin\Debug\netcoreapp2.0\dotnet.runtimeconfig.json
+D:\PersonData\temp\2021\11\1115\z3-master\examples\dotnet\bin\Debug\netcoreapp2.0\dotnet.runtimeconfig.dev.json
+D:\PersonData\temp\2021\11\1115\z3-master\examples\dotnet\bin\Debug\netcoreapp2.0\dotnet.dll
+D:\PersonData\temp\2021\11\1115\z3-master\examples\dotnet\bin\Debug\netcoreapp2.0\dotnet.pdb
+D:\PersonData\temp\2021\11\1115\z3-master\examples\dotnet\obj\Debug\netcoreapp2.0\dotnet.dll
+D:\PersonData\temp\2021\11\1115\z3-master\examples\dotnet\obj\Debug\netcoreapp2.0\dotnet.pdb
+D:\PersonData\temp\2021\11\1115\z3-master\examples\dotnet\obj\Debug\netcoreapp2.0\dotnet.genruntimeconfig.cache
